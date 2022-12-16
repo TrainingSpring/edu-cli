@@ -8,11 +8,9 @@ import chalk from "chalk";
 import ora from "ora"
 import create from "../utils/create.js";
 import checkUpdate from "../utils/checkUpdate.js";
-// const inquirer = require("inquirer");
-// const chalk = require("chalk");
 program.command("init <project-name>")
     .description("创建一个新的项目 , 项目名称是<project-name>")
-    .option("-f, --force", "overwrite target directory if it exists")
+    .option("-f, --force", "如果项目已经存在 ， 则覆盖重建。")
     .action(async (projectName,options)=>{
         // 当前命令行路径
         const cwd = process.cwd();

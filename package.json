@@ -1,14 +1,18 @@
 {
   "name": "honghu-edu-cli",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "鸿鹄pc端脚手架",
   "main": "index.js",
   "type": "module",
   "bin": {
     "edu-cli": "bin/index.js"
   },
+  "repository": {
+    "url": "https://github.com/TrainingSpring/edu-cli.git",
+    "type": "git"
+  },
   "keywords": [],
-  "author": "",
+  "author": "Training",
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.1.2",

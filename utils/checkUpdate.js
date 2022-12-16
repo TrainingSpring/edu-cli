@@ -4,12 +4,14 @@
  * @author kechen
  * @since 2022/3/23
  */
-import pkg from "../package.json"
 import shell from "shelljs";
 import semver from "semver"
 import chalk from "chalk";
 import inquirer from "inquirer";
 import ora from "ora";
+import {createRequire} from "module"
+const require = createRequire(import.meta.url);
+const pkg = require("../package.json");
 
 /**
  * @description 更新到最新版
