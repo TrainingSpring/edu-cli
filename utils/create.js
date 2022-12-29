@@ -9,14 +9,7 @@ import install from "./install.js";
 import setRegistry from "./setRegister.js";
 import {createRequire} from "module"
 const require = createRequire(import.meta.url);
-const go = (downloadPath, projectRoot) => {
-    return download(downloadPath, projectRoot).then(target => {
-        //下载模版
-        return {
-            downloadTemp: target
-        }
-    })
-}
+
 export default async function (projectName) {
     // 校验项目名称合法性，项目名称仅支持字符串、数字，因为后续这个名称会用到项目中的package.json以及其他很多地方，所以不能存在特殊字符
     const pattern = /^[a-zA-Z0-9]*$/;
@@ -65,7 +58,7 @@ export default async function (projectName) {
                 }
             }
         ]);
-        
+
         // 开始安装依赖
         if (isInstall) {
             await install({projectName, installTool});
