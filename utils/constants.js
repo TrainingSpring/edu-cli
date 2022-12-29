@@ -7,7 +7,7 @@
 export const baseUrl = 'https://gitee.com/TrainingLove';
 export const templateConfig = {
     'react':{
-
+        "taro模板":"school-taro-template"
     },
     'vue 2':{
         "PC后台管理,带登录":"school-system-login-template"
@@ -20,16 +20,15 @@ const frames = Object.keys(templateConfig);
 export const promptList = [
     {
         name: 'frame',
-        message: '使用什么框架',
+        message: '使用什么技术框架',
         type: 'list',
         default: 'react',
         choices: frames,
     },
     {
         name: 'template',
-        message: '使用什么项目框架',
+        message: '使用什么项目模板',
         type: 'list',
-        default: '',
         when:(answers)=>{
             let frame = answers.frame;
             if (frame === 'vue 2')
@@ -50,8 +49,8 @@ export const promptList = [
         choices: ['webpack', 'vite'],
     },*/
     {
-        name: 'setRegistry',
-        message: "是否需要设置git远程链接?",
+        name: 'isRegistry',
+        message: "是否需要设置git远程仓库地址?",
         type: 'confirm',
         default: false,
         choices: [
@@ -60,11 +59,11 @@ export const promptList = [
         ]
     },
     {
-        name: 'gitRemote',
+        name: 'remote',
         message: '输入您的远程git地址! ',
         type: 'input',
         when: (answers) => {
-            return answers.setRegistry;
+            return answers.isRegistry;
         },
         validate: function (input) {
             const done = this.async();

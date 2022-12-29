@@ -3,14 +3,14 @@ import chalk from "chalk";
 import {baseUrl, promptList, templateConfig} from "./constants.js"
 import path from "path"
 import fs from "fs";
-import downloadTemplate from "./download.js"
-import renderTemplate from "./renderTemplate.js";
+import download from "./download.js"
+import render from "./render.js";
 import install from "./install.js";
 import setRegistry from "./setRegister.js";
-import ora from "ora";
-
+import {createRequire} from "module"
+const require = createRequire(import.meta.url);
 const go = (downloadPath, projectRoot) => {
-    return downloadTemplate(downloadPath, projectRoot).then(target => {
+    return download(downloadPath, projectRoot).then(target => {
         //下载模版
         return {
             downloadTemp: target
@@ -26,7 +26,7 @@ export default async function (projectName) {
     }
     // 询问
     inquirer.prompt(promptList).then(async answers => {
-        let {frame,template,setRegistry:isRegistry,gitRemote} = answers;
+        let {frame,template,isRegistry,remote} = answers;
 
         let temp = templateConfig[frame][template];
         // 目标文件夹
@@ -38,9 +38,9 @@ export default async function (projectName) {
             if (err) throw err;
         });
         // 开始下载
-        const data = await go(downloadPath, destDir);
+        const data = await download(downloadPath, destDir)
         // 开始渲染
-        await renderTemplate(data.downloadTemp, projectName);
+        await render(data, projectName);
         // 是否需要自动安装依赖，默认否
         const {isInstall, installTool} = await inquirer.prompt([
             {
@@ -58,13 +58,14 @@ export default async function (projectName) {
                 name: "installTool",
                 type: "list",
                 default: "npm",
-                message: '使用哪个包管理工具',
+                message: '使用哪个包管理工具?',
                 choices: ["npm", "cnpm", "yarn"],
                 when: function (answers) {
                     return answers.isInstall;
                 }
             }
         ]);
+        
         // 开始安装依赖
         if (isInstall) {
             await install({projectName, installTool});
@@ -72,11 +73,17 @@ export default async function (projectName) {
 
         // 是否设置了仓库地址
         if (isRegistry) {
-            setRegistry(projectName, answers.gitRemote);
+            setRegistry(projectName, remote);
         }
 
-        // 项目下载成功
-        const success = chalk.greenBright("✨项目初始化完成!");
-        success.start();
+        // 写入项目名
+        let pkg = require(path.join(process.cwd(),projectName,"package.json"))
+        pkg.name = projectName;
+        fs.writeFile(path.join(process.cwd(),projectName,"package.json"),JSON.stringify(pkg),{encoding:"utf-8"},function (err) {
+            if (err)
+                console.error(chalk.redBright("package.name更改失败, 请手动更改!"))
+            else
+                console.log(chalk.greenBright("✨项目初始化完成!"));
+        })
     });
 }

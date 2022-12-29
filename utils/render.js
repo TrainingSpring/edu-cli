@@ -1,6 +1,6 @@
 /**
  * 渲染模板
- * renderTemplate.js
+ * render.js
  * @author kechen
  * @since 2022/3/24
  */
@@ -13,11 +13,10 @@ import fs from "fs-extra";
 import {createRequire} from "module"
 
 const require = createRequire(import.meta.url);
-console.log(import.meta.url);
 const {render} = ejs
 const renderPro = promisify(render);
 const __dirname = path.resolve();
-export default async function renderTemplate(result, projectName) {
+export default async function render(result, projectName) {
     if (!result) {
         return Promise.reject(new Error(`无效的目录：${result}`))
     }

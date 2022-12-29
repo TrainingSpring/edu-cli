@@ -19,7 +19,9 @@ program.command("init <project-name>")
         if (fs.existsSync(targetDir)) {
             if (!options.force) {
                 // 如果没有设置-f则提示，并退出
-                console.error(chalk.red(`项目已存在! 请更改你的项目名或者使用命令 ${chalk.greenBright(`edu-cli create ${projectName} -f`)} 来创建项目!`))
+                console.error(
+                    chalk.red(`项目已存在! 请更改你的项目名或者使用命令 ${chalk.greenBright(`edu-cli create ${projectName} -f`)} 来创建项目!`)
+                )
                 return;
             }
             // 如果设置了-f则二次询问是否覆盖原文件夹
